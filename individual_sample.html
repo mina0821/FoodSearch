@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html itemscope itemtype="http://schema.org/WebPage">
 <head>
 <!-- character encoding -->
 <meta charset="UTF-8">
@@ -12,6 +12,30 @@
 
 <!-- for responsive design -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- add facebook open graph protocal metadata -->
+<meta property="og:title" content="FoodSearch" />
+<meta property="og:url" content="https://foodsearch.azurewebsites.net/search.html" />
+<meta property="og:type" content="website" />
+
+<!-- add twitter card metadata -->
+<meta name="twitter:card" content="summary" />
+
+<!-- icons for multiple platform -->
+<!-- favicon -->
+<link rel="icon" type="image/jpg" sizes="64x64" href="img/icon.jpg">
+<!-- ios icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon.jpg">
+<!-- android icon -->
+<meta name="msapplication-square-70x70logo" content="img/icon.jpg">
+
+<!-- place microdata -->
+<meta itemprop="latitude" content="40.75" />
+<meta itemprop="longitude" content="73.98" />
+
+<!-- review and rating microdata -->
+<meta itemprop="review" content="review..." />
+<meta itemprop="rating" content="4.1" />
 
 </head>
 <body>
@@ -43,6 +67,7 @@
 <!-- main page -->
 <!-- individual restaurant detail block -->
 <div id="rest-block" class="row">
+
 	<!-- restaurant title display -->
 	<div class="rest-row rest-title">
 		<h1>Happy Lamb Hot Pot</h1>
@@ -60,11 +85,34 @@
 		<!-- restaurant ratings -->
 		<div class="rest-title"><h2>Ratings:</h2></div>
 		<h3>4.1</h3>
+
+		<!-- restaurant sample image -->
+		<div class="rest-title"><h2>Image:</h2></div>
+		<picture>
+			<!-- sample image for desktop user -->
+			<source media="(min-width: 800px)" srcset="img/sample_image.jpg">
+			<!-- sample image for moblie user -->
+			<source media="(max-width: 800px)" srcset="img/sample_image_moblie.jpg">
+			<img class="rest-row" src="img/sample_image.jpg" alt="Picture of restaurant.">
+		</picture>
+
+		<!-- restaurant video -->
+		<div class="rest-title"><h2>Video:</h2></div>
+		<video class="rest-row" controls>
+			<source src="video/video.mp4" type="video/mp4">
+			<source src="video/video.ogg" type="video/ogg">
+		</video>
 	</div>
 
 	<!-- restaurant location map -->
 	<div class="rest-col">
-		<img class="rest-map" src="img/hotpot_location.JPG" alt="It's a live map for the restaurant.">
+		<picture>
+			<!-- sample image for desktop user -->
+			<source media="(min-width: 800px)" srcset="img/hotpot_location.jpg">
+			<!-- sample image for moblie user -->
+			<source media="(max-width: 800px)" srcset="img/hotpot_location_moblie.jpg">
+			<img class="rest-row" src="img/hotpot_location.JPG" alt="It's a live map for the restaurant.">
+		</picture>
 	</div>
 
 	<!-- restaurant reviews -->

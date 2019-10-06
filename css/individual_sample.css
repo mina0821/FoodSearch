@@ -24,7 +24,7 @@
 }
 
 /* responsive design for desktop */
-@media only screen and (min-width: 1240px) {
+@media only screen and (min-width: 800px) {
 	.rest-col {
 		width: 40%;
 		padding: 30px;
@@ -89,20 +89,16 @@
 	width: 100%;
 }
 
-/* put restaurant information as a whole row */
+/* put restaurant information as a whole width row */
 .rest-row {
 	width: 100%;
+	margin-top: 10px;
 }
 
 /* for each title and subtitle message */
 .rest-title {
 	background-color: #aaa;
 	text-align: center;
-}
-
-/* for the restaurant location map */
-.rest-map {
-	width: 100%;
 }
 
 /*  ---------- end of main page setup ------- */

@@ -13,6 +13,22 @@
 <!-- for responsive design -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- add facebook open graph protocal metadata -->
+<meta property="og:title" content="FoodSearch" />
+<meta property="og:url" content="https://foodsearch.azurewebsites.net/search.html" />
+<meta property="og:type" content="website" />
+
+<!-- add twitter card metadata -->
+<meta name="twitter:card" content="summary" />
+
+<!-- icons for multiple platform -->
+<!-- favicon -->
+<link rel="icon" type="image/jpg" sizes="64x64" href="img/icon.jpg">
+<!-- ios icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon.jpg">
+<!-- android icon -->
+<meta name="msapplication-square-70x70logo" content="img/icon.jpg">
+
 </head>
 <body>
 <!-- header -->
@@ -73,8 +89,14 @@
 		</table>
 	</div>
 
-	<!-- map and alternative text message for ppl with disability -->
-	<img class="results-col" src="img/map.JPG" alt="It's a live map for all the restaurants.">
+		<!-- map and alternative text message for ppl with disability -->
+	<picture class="results-col">
+		<!-- sample image for desktop user -->
+		<source media="(min-width: 800px)" srcset="img/map.jpg">
+		<!-- sample image for moblie user -->
+		<source media="(max-width: 800px)" srcset="img/map_moblie.jpg">
+		<img class="results-col" src="img/map.JPG" alt="It's a live map for all the restaurants.">
+	</picture>
 
 </div>
 <!-- end of main page -->
