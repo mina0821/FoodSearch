@@ -10,11 +10,6 @@
 
 /* ---------- header setup ------------------ */
 /* title and advertisement */
-/* handle mouse hovering */
-.header-navigation a:hover {
-	background-color: #111;
-}
-
 /* specifes header title */
 #header-title {
 	text-align: center;
@@ -53,9 +48,60 @@
 	text-decoration: none;
 	font-size: 21px;
 }
+
+/* handle mouse hovering */
+.header-navigation a:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of header setup ---------- */
 
 /*  ---------- main page setup -------------- */
+/* results block formatting */
+#results-block {
+	display: grid;
+	grid-template-columns: auto auto;
+	width: 100%;
+}
+
+/* for each col in results block */
+.results-col {
+	text-align: left;
+	padding-left: 50px;
+	padding-top: 50px;
+}
+
+/* formatting the whole table */
+.results-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+/* formatting results table title */
+#results-title {
+	background-color: #999;
+	padding: 15px;
+	font-size: 20px;
+}
+
+/* formatting each table cells */
+.results-cell {
+	background-color: #333;
+	padding: 15px;
+	font-size: 20px;
+}
+
+/* for each link in the table */
+.results-cell a {
+	color: white;
+	text-decoration: none;
+}
+
+/* handles mouse hover */
+.results-cell a:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

@@ -10,11 +10,6 @@
 
 /* ---------- header setup ------------------ */
 /* title and advertisement */
-/* handle mouse hovering */
-.header-navigation a:hover {
-	background-color: #111;
-}
-
 /* specifes header title */
 #header-title {
 	text-align: center;
@@ -53,9 +48,44 @@
 	text-decoration: none;
 	font-size: 21px;
 }
+
+/* handle mouse hovering */
+.header-navigation a:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of header setup ---------- */
 
 /*  ---------- main page setup -------------- */
+/* for restaurant details block */
+#rest-block {
+	display: grid;
+	grid-template-columns: auto auto;
+	width: 100%;
+}
+
+/* put restaurant information as a whole row */
+.rest-row {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+/* for each title and subtitle message */
+.rest-title {
+	background-color: #aaa;
+	text-align: center;
+}
+
+/* for each reataurant block columns */
+.rest-col {
+	padding: 20px;
+}
+
+/* for description title */
+.rest-detail-title {
+	background-color: #aaa;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

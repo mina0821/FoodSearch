@@ -31,15 +31,58 @@
   <a href="search.html">Search</a>
   <a href="submission.html">Submission</a>
   <a href="registration.html">Registration</a>
-  <a href="">Map</a>
+  <a href="results_sample.html">Map</a>
 </div>
 
 
 <!-- end of header -->
 
 <!-- main page -->
-<div class="row">
-	<h1> adding content </h1>
+<div id="register-block" class="row">
+		<!-- get username -->
+		<div class="register-col">
+			<h2><label>Username:</label></h2>
+		</div>
+
+		<div class="register-col">
+			<input class="register-input" type="text" placeholder="Username...">
+		</div>
+
+		<!-- get password-->
+		<div class="register-col">
+			<h2><label>Password:</label></h2>
+		</div>
+
+		<div class="register-col">
+			<input class="register-input" type="password" placeholder="Password...">
+		</div>
+
+		<!-- get gender -->
+		<div class="register-col">
+			<h2><label>Gender:</label></h2>
+		</div>
+
+		<div class="register-col">
+			<select class="register-input">
+				<option>Female</option>
+				<option>Male</option>
+				<option>Prefer not to say</option>
+			</select>
+		</div>
+
+		<!-- get email -->
+		<div class="register-col">
+			<h2><label>Email:</label></h2>
+		</div>
+
+		<div class="register-col">
+			<input class="register-input" type="email">
+		</div>
+
+		<!-- register button -->
+		<div class="register-col">
+			<input id="register-btn" type="submit" value="Register">
+		</div>
 </div>
 <!-- end of main page -->
 

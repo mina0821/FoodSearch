@@ -31,15 +31,58 @@
   <a href="search.html">Search</a>
   <a href="submission.html">Submission</a>
   <a href="registration.html">Registration</a>
-  <a href="">Map</a>
+  <a href="results_sample.html">Map</a>
 </div>
 
 
 <!-- end of header -->
 
 <!-- main page -->
-<div class="row">
-	<h1> adding content </h1>
+<div id="submit-block" class="row">
+		<!-- get restaurant name -->
+		<div class="submit-col">
+			<h2><label>Restaurant name:</label></h2>
+		</div>
+
+		<div class="submit-col">
+			<input class="submit-input" type="text" placeholder="Restaurant name...">
+		</div>
+
+		<!-- get description -->
+		<div class="submit-col">
+			<h2><label>Description:</label></h2>
+		</div>
+
+		<div class="submit-col">
+			<textarea class="submit-input" placeholder="Description..."></textarea>
+		</div>
+
+		<!-- get locations of the restaurant -->
+		<div class="submit-col">
+			<h2><label>Location:</label></h2>
+		</div>
+
+		<div class="submit-double-col-left">
+			<input class="submit-input" type="text" placeholder="Latitude...">
+		</div>
+
+		<div class="submit-double-col-right">
+			<input class="submit-input" type="text" placeholder="Longtitude...">
+		</div>
+
+		<!-- get image -->
+		<div class="submit-col">
+			<h2><label>Upload image:</label></h2>
+		</div>
+
+		<div class="submit-col">
+			<input class="submit-input" type="file" accept="image/*">
+		</div>
+
+		<!-- submit button -->
+		<div class="submit-col">
+			<input id="submit-btn" type="submit" value="Submit">
+		</div>
 </div>
 <!-- end of main page -->
 

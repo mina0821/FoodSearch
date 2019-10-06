@@ -10,10 +10,6 @@
 
 /* ---------- header setup ------------------ */
 /* title and advertisement */
-/* handle mouse hovering */
-.header-navigation a:hover {
-	background-color: #111;
-}
 
 /* specifes header title */
 #header-title {
@@ -53,9 +49,57 @@
 	text-decoration: none;
 	font-size: 21px;
 }
+
+/* handle mouse hovering */
+.header-navigation a:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of header setup ---------- */
 
 /*  ---------- main page setup -------------- */
+/* search box styles */
+#search-box {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	width: 100%;
+}
+
+/* for each search component */
+.search-col {
+	width: 100%;
+	text-align: center;
+	font-size:12px;
+}
+
+/* search button attributes */
+#search-btn {
+	width: 80%;
+	background-color: #333;
+	color: white;
+	padding: 14px 20px;
+	margin: 18px 0px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+/* search button hover setup */
+#search-btn:hover {
+	background-color: #111;
+}
+
+/* search input format */
+.search-input {
+	width: 80%;
+	padding: 12px 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

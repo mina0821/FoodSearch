@@ -31,15 +31,44 @@
   <a href="search.html">Search</a>
   <a href="submission.html">Submission</a>
   <a href="registration.html">Registration</a>
-  <a href="">Map</a>
+  <a href="results_sample.html">Map</a>
 </div>
 
 
 <!-- end of header -->
 
 <!-- main page -->
-<div class="row">
-	<h1> adding content </h1>
+<div id="search-box" class="row">
+		<!-- get food name label -->
+		<div class="search-col">
+			<h1><label>Name:</label></h1>
+		</div>
+
+		<!-- food name input box -->
+		<div class="search-col">
+			<input class="search-input" type="text" placeholder="Food name...">
+		</div>
+
+		<!-- get rating label-->
+		<div class="search-col">
+			<h1><label>Rating:</label></h1>
+		</div>
+
+		<!-- rating input box -->
+		<div class="search-col">
+			<select class="search-input">
+				<option>1.0</option>
+				<option>2.0</option>
+				<option>3.0</option>
+				<option>4.0</option>
+				<option>5.0</option>
+			</select>
+		</div>
+
+		<!-- search button -->
+		<div class="search-col">
+			<input id="search-btn" type="submit" value="Search">
+		</div>
 </div>
 <!-- end of main page -->
 
