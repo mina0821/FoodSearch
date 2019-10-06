@@ -8,8 +8,41 @@
 	width: 100%;
 }
 
+/* responsive design for portrat phone*/
+@media only screen and (max-width: 600px) {
+	#advertisement {
+		display: none;
+	}
+}
+
+/* responsive design for lanscape phone */
+@media only screen and (max-width: 800px) {
+	.rest-col {
+		width: 80%;
+		padding-bottom: 20px;
+	}
+}
+
+/* responsive design for desktop */
+@media only screen and (min-width: 1240px) {
+	.rest-col {
+		width: 40%;
+		padding: 30px;
+	}
+}
+
+
 /* ---------- header setup ------------------ */
 /* title and advertisement */
+/* making headers via Grid */
+#header-grid {
+	display: grid;
+	grid-template-columns: 300px auto;
+	background-color: white;
+	color: black;
+	width: 100%;
+}
+
 /* specifes header title */
 #header-title {
 	text-align: center;
@@ -21,15 +54,6 @@
 	text-align: right;
 	padding: 30px 0px 0px 0px;
 	font-size: 15px;
-}
-
-/* making headers via Grid */
-#header-grid {
-	display: grid;
-	grid-template-columns: 300px auto;
-	background-color: white;
-	color: black;
-	width: 100%;
 }
 
 /* navigation */
@@ -59,15 +83,15 @@
 /*  ---------- main page setup -------------- */
 /* for restaurant details block */
 #rest-block {
-	display: grid;
-	grid-template-columns: auto auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
 	width: 100%;
 }
 
 /* put restaurant information as a whole row */
 .rest-row {
-	grid-column-start: 1;
-	grid-column-end: 3;
+	width: 100%;
 }
 
 /* for each title and subtitle message */
@@ -76,14 +100,9 @@
 	text-align: center;
 }
 
-/* for each reataurant block columns */
-.rest-col {
-	padding: 20px;
-}
-
-/* for description title */
-.rest-detail-title {
-	background-color: #aaa;
+/* for the restaurant location map */
+.rest-map {
+	width: 100%;
 }
 
 /*  ---------- end of main page setup ------- */

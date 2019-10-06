@@ -8,11 +8,22 @@
 	width: 100%;
 }
 
+/* responsive design for portrat phone*/
+@media only screen and (max-width: 600px) {
+	#advertisement {
+		display: none;
+	}
+}
+
 /* ---------- header setup ------------------ */
 /* title and advertisement */
-/* handle mouse hovering */
-.header-navigation a:hover {
-	background-color: #111;
+/* making headers via Grid */
+#header-grid {
+	display: grid;
+	grid-template-columns: 300px auto;
+	background-color: white;
+	color: black;
+	width: 100%;
 }
 
 /* specifes header title */
@@ -26,15 +37,6 @@
 	text-align: right;
 	padding: 30px 0px 0px 0px;
 	font-size: 15px;
-}
-
-/* making headers via Grid */
-#header-grid {
-	display: grid;
-	grid-template-columns: 300px auto;
-	background-color: white;
-	color: black;
-	width: 100%;
 }
 
 /* navigation */
@@ -53,6 +55,13 @@
 	text-decoration: none;
 	font-size: 21px;
 }
+
+
+/* handle mouse hovering */
+.header-navigation a:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of header setup ---------- */
 
 /*  ---------- main page setup -------------- */
