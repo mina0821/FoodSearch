@@ -119,6 +119,23 @@
 	border-radius: 4px;
 	box-sizing: border-box;
 }
+
+/* required field styling */
+/* when the input is invalid */
+input:required:invalid, input:focus:invalid {
+	background-color: #f28f8f;
+}
+
+/* when user is typing */
+input:required:focus {
+	background-color: #f5f5f5;
+}
+
+/* when input is valid */
+input:required:valid {
+	background-color: #c1fcb3;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

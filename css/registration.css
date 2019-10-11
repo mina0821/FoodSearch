@@ -106,6 +106,22 @@
 	border-radius: 4px;
 	box-sizing: border-box;
 }
+
+/* error list styling */
+#username-error-list {
+	font-size: 20px;
+	background-color: #ddd;
+}
+
+#password-error-list {
+	font-size: 20px;
+	background-color: #ddd;
+}
+
+#email-error-list {
+	font-size: 20px;
+	background-color: #ddd;
+}
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

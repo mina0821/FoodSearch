@@ -124,6 +124,13 @@
 	background-color: #111;
 }
 
+/* map layout design */
+#map {
+	margin: 20px;
+	width: 700px;
+	height: 500px;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

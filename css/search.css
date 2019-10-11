@@ -80,7 +80,7 @@
 }
 
 /* search button attributes */
-#search-btn {
+.search-btn {
 	width: 80%;
 	background-color: #333;
 	color: white;

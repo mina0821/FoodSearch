@@ -1,41 +1,46 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage">
 <head>
-<!-- character encoding -->
-<meta charset="UTF-8">
+	<!-- character encoding -->
+	<meta charset="UTF-8">
 
-<!-- title of the page -->
-<title>Individual Sample</title>
+	<!-- title of the page -->
+	<title>Individual Sample</title>
 
-<!-- define external css -->
-<link rel="stylesheet" type="text/css" href="css/individual_sample.css">
+	<!-- define external css -->
+	<link rel="stylesheet" type="text/css" href="css/individual_sample.css">
+	<!-- define external js file -->
+	<script src="js/individual_sample.js" defer></script>
+	<script async defer
+	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBh-2YTNU1ZPyvGY3_Boirjy9EVXCMAmXU&callback=initMap">
+	</script>
 
-<!-- for responsive design -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- for responsive design -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- add facebook open graph protocal metadata -->
-<meta property="og:title" content="FoodSearch" />
-<meta property="og:url" content="https://foodsearch.azurewebsites.net/search.html" />
-<meta property="og:type" content="website" />
+	<!-- add facebook open graph protocal metadata -->
+	<meta property="og:title" content="FoodSearch" />
+	<meta property="og:url" content="https://foodsearch.azurewebsites.net/search.html" />
+	<meta property="og:type" content="website" />
 
-<!-- add twitter card metadata -->
-<meta name="twitter:card" content="summary" />
+	<!-- add twitter card metadata -->
+	<meta name="twitter:card" content="summary" />
 
-<!-- icons for multiple platform -->
-<!-- favicon -->
-<link rel="icon" type="image/jpg" sizes="64x64" href="img/icon.jpg">
-<!-- ios icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="img/icon.jpg">
-<!-- android icon -->
-<meta name="msapplication-square-70x70logo" content="img/icon.jpg">
+	<!-- icons for multiple platform -->
+	<!-- favicon -->
+	<link rel="icon" type="image/jpg" sizes="64x64" href="img/icon.jpg">
+	<!-- ios icon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="img/icon.jpg">
+	<!-- android icon -->
+	<meta name="msapplication-square-70x70logo" content="img/icon.jpg">
 
-<!-- place microdata -->
-<meta itemprop="latitude" content="40.75" />
-<meta itemprop="longitude" content="73.98" />
+	<!-- place microdata -->
+	<meta itemprop="latitude" content="40.75" />
+	<meta itemprop="longitude" content="73.98" />
 
-<!-- review and rating microdata -->
-<meta itemprop="review" content="review..." />
-<meta itemprop="rating" content="4.1" />
+	<!-- review and rating microdata -->
+	<meta itemprop="review" content="review..." />
+	<meta itemprop="rating" content="4.1" />
 
 </head>
 <body>
@@ -105,15 +110,7 @@
 	</div>
 
 	<!-- restaurant location map -->
-	<div class="rest-col">
-		<picture>
-			<!-- sample image for desktop user -->
-			<source media="(min-width: 800px)" srcset="img/hotpot_location.jpg">
-			<!-- sample image for moblie user -->
-			<source media="(max-width: 800px)" srcset="img/hotpot_location_moblie.jpg">
-			<img class="rest-row" src="img/hotpot_location.JPG" alt="It's a live map for the restaurant.">
-		</picture>
-	</div>
+	<div class="rest-col" id="map"></div>
 
 	<!-- restaurant reviews -->
 	<div class="rest-row rest-title">
