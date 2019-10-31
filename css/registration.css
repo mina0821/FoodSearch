@@ -122,6 +122,12 @@
 	font-size: 20px;
 	background-color: #ddd;
 }
+
+/* error message formatting */
+.error_msg {
+	font-size: 18px;
+	color: red;
+}
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */
