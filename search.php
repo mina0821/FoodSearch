@@ -1,3 +1,16 @@
+<?php
+try {
+    $conn = new PDO("mysql:host=localhost;dbname=db-rst", "root", "");
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully";
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,14 +99,24 @@
 			</select>
 		</div>
 
+		<!-- get location label -->
+		<div class="search-col">
+			<h1><label>Location:</label></h1>
+		</div>
+
+		<!-- location input box -->
+		<div class="search-col">
+			<input class="search-input" type="text" placeholder="Latitude..." value="0.01">
+		</div>
+
+		<!-- location input box -->
+		<div class="search-col">
+			<input class="search-input" type="text" placeholder="Longitude..." value="0.01">
+		</div>
+
 		<!-- search button -->
 		<div class="search-col">
 			<input class="search-btn" type="submit" value="Search">
-		</div>
-
-		<!-- search near by restaurant button -->
-		<div class="search-col">
-			<button class="search-btn" onclick="getLocation()">Search Nearby Restaurant</button>
 		</div>
 
 		<!-- only for testing coordinates purpose -->
