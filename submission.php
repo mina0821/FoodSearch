@@ -160,7 +160,7 @@ if (isset($_POST['submit'])){
 			$stmt->bindValue(':review', $review);
 			
 			//execute the statement to insert new account
-			//$result = $stmt->execute();
+			$result = $stmt->execute();
 
 			//upload the image to aws s3 bucket
 			$keyName = $name.'/';
