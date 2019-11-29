@@ -1,3 +1,31 @@
+<?php
+//start the session
+session_start();
+
+//Check if the user is logged in.
+if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+    //User logged in. replace username with login link
+    $user_login = "<a>".$_SESSION['user_name']." logged in</a>";
+    //provide a method for user to loggout
+    $user_loggout = "<a href='logout.php'>Logout</a>";
+    //combine the string
+    $user_link = $user_login . $user_loggout;
+} else {
+	//if not, show the link to login and register
+	$user_link = "<a href='registration.php'>Registration</a><a href='login.php'>Login</a>";
+}
+
+try {
+	// connect to database
+    $conn = new PDO("mysql:host=localhost;dbname=db-rst", "root", "root");
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+?>
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage">
 <head>
@@ -10,8 +38,8 @@
 	<!-- define external css -->
 	<link rel="stylesheet" type="text/css" href="css/individual_sample.css">
 	<!-- define external js file -->
-	<script src="js/individual_sample.js"></script>
-	<script async defer
+	<script defer src="js/individual_sample.js"></script>
+	<script defer
 	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBh-2YTNU1ZPyvGY3_Boirjy9EVXCMAmXU&callback=initMap">
 	</script>
 
@@ -60,10 +88,9 @@
 
 <!-- nativation menu -->
 <div class="header-navigation row">
-  <a href="search.html">Search</a>
-  <a href="submission.html">Submission</a>
-  <a href="registration.html">Registration</a>
-  <a href="results_sample.html">Map</a>
+  <a href="search.php">Search</a>
+  <a href="submission.php">Submission</a>
+  <div id="user-account"><?php echo $user_link; ?></div>
 </div>
 
 
@@ -75,21 +102,48 @@
 
 	<!-- restaurant title display -->
 	<div class="rest-row rest-title">
-		<h1>Happy Lamb Hot Pot</h1>
-	</div>
+	<?php
+		//get value from query string
+		$name = $_GET['name'];
+		//send location data to js for map
+		$lat = $_GET['lat'];
+		$longt = $_GET['longt'];
+		echo "<script>";
+		echo 'var lat = ' . json_encode($lat) . ';';
+		echo 'var longt = ' . json_encode($longt) . ';';
+		echo "</script>";
 
-	<div class="rest-col">
-		<!-- restaurant description -->
-		<div class="rest-title"><h2>Description:</h2></div>
-		<h3>This is Happy Lamb Hot Pot</h3>
-
-		<!-- restaurant hours -->
-		<div class="rest-title"><h2>Hours:</h2></div>
-		<h3>Mon-Sun 11am-11pm</h3>
+		//display result restaurant name
+		echo '<h1>'.$name.'</h1>';
+		echo '</div><div class="rest-col"><div class="rest-title"><h2>Description:</h2></div>';
+		echo '<h3>This is '.$name.'.</h3>';
+	?>
 
 		<!-- restaurant ratings -->
 		<div class="rest-title"><h2>Ratings:</h2></div>
-		<h3>4.1</h3>
+		<?php
+			//mysql search query
+			$pdoQuery = 'SELECT ROUND(AVG(`rating`),2) AS rating FROM `Review` WHERE `name` LIKE :name';
+
+			//prepare the statement to prevent sql injection attack
+			$pdoResult = $conn->prepare($pdoQuery);
+
+			//bind the value to query
+			$keyname = "%".$name."%";
+			$pdoResult->bindParam(':name', $keyname, PDO::PARAM_STR);
+
+			//execute statment
+			$pdoExec = $pdoResult->execute();
+
+			if ($pdoExec)
+			{
+				//if rating exist
+				foreach($pdoResult as $row)
+				{
+					echo '<h3>'.$row['rating'].'</h3>';
+				}
+			}
+		?>
 
 		<!-- restaurant sample image -->
 		<div class="rest-title"><h2>Image:</h2></div>
@@ -101,12 +155,6 @@
 			<img class="rest-row" src="img/sample_image.jpg" alt="Picture of restaurant.">
 		</picture>
 
-		<!-- restaurant video -->
-		<div class="rest-title"><h2>Video:</h2></div>
-		<video class="rest-row" controls>
-			<source src="video/video.mp4" type="video/mp4">
-			<source src="video/video.ogg" type="video/ogg">
-		</video>
 	</div>
 
 	<!-- restaurant location map -->
@@ -118,10 +166,30 @@
 	</div>
 
 	<div class="rest-row rest-col">
-		<h3>customer1: review...</h3>
-		<h3>customer2: review...</h3>
-		<h3>customer3: review...</h3>
-		<h3>customer4: review...</h3>
+		<?php
+			//mysql search query
+			$pdoQuery = 'SELECT `review` FROM `Review` WHERE `name` LIKE :name';
+
+			//prepare the statement to prevent sql injection attack
+			$pdoResult = $conn->prepare($pdoQuery);
+
+			//bind the value to query
+			$keyname = "%".$name."%";
+			$pdoResult->bindParam(':name', $keyname, PDO::PARAM_STR);
+
+			//execute statment
+			$pdoExec = $pdoResult->execute();
+
+			if ($pdoExec)
+			{
+				//if some review exist
+				foreach($pdoResult as $row)
+				{
+					echo '<h3>'.$row['review'].'</h3>';
+				}
+			}
+		?>
+		<h3>More reviews comming soon...</h3>
 	</div>
 
 </div>

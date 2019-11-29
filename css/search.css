@@ -56,10 +56,16 @@
 	font-size: 21px;
 }
 
+/* for login and registration floating */
+#user-account {
+	float: right;
+}
+
 /* handle mouse hovering */
 .header-navigation a:hover {
-	background-color: #111;
+	background-color: #222;
 }
+
 
 /*  ---------- end of header setup ---------- */
 

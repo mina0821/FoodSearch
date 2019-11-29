@@ -1,3 +1,139 @@
+<?php
+//start the session
+session_start();
+
+//Check if the user is logged in.
+if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+    //User logged in. replace username with login link
+    $user_login = "<a>".$_SESSION['user_name']." logged in</a>";
+    //provide a method for user to loggout
+    $user_loggout = "<a href='logout.php'>Logout</a>";
+    //combine the string
+    $user_link = $user_login . $user_loggout;
+} else {
+	//if not, show the link to login and register
+	$user_link = "<a href='registration.php'>Registration</a><a href='login.php'>Login</a>";
+}
+
+try {
+	// connect to database
+    $conn = new PDO("mysql:host=localhost;dbname=db-rst", "root", "root");
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+
+//define variables and initialize with empty values
+$nameErr = $passErr = $emailErr = $birthdayErr = $msg = "";
+$name = $pass = $email = $birthday = "";
+
+//if user submit a registration form
+if (isset($_POST['register'])){
+	//retrive the field values from registration form
+	//data validation
+	//if such field is empty, report error
+	if (empty($_POST['username'])) {
+		$nameErr = "Please fill in the username.";
+	} 
+	else {
+		$name = trim($_POST['username']);
+		//check if username already exist
+		//construct sql statement
+		$sql = "SELECT COUNT(username) AS num FROM Users WHERE username = :username";
+
+		//prepare the statment to prevent hacker
+		$stmt = $conn->prepare($sql);
+
+		//bind the value to sql statement
+		$stmt->bindValue(':username', $name);
+
+		//execute the statement
+		$stmt->execute();
+
+		//fetch the row
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		//if the username already exist, update the username error
+		if($row['num'] > 0){
+			$nameErr = "Username already exists.";
+		}
+	}
+
+	//if such field is empty, report error
+	if (empty($_POST['password'])) {
+		$passErr = "Please fill in the password.";
+	}
+	else {
+		$pass = trim($_POST['password']);
+		//test if password is at least six character
+	    //numeric and alphabetic format check on password
+		if (strlen($pass) < 6) {
+	   		$passErr = "Please enter at least 6 character password."; 
+		}
+		//test if password includes one digit number
+		else if (!preg_match("/[0-9]/",$pass)) {
+			$passErr = "Please include at least one digit number.";
+		}
+		//test if password includes one upper case letter
+		else if (!preg_match("/[A-Z]/", $pass)) {
+			$passErr = "Please include at least one upper case letter.";
+		}
+	}
+
+	//if such field is empty, report error
+	if (empty($_POST['email'])) {
+		$emailErr = "Please fill in the email.";
+	} 
+	else {
+		$email = trim($_POST['email']);
+		//email format check on email field
+	    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+	    	$emailErr = "Please enter a valid email."; 
+		}
+	}
+
+	//if such field is empty, report error
+	if (empty($_POST['birthday'])) {
+		$birthdayErr = "Please fill in the date of birth.";
+	} 
+	else {
+		$birthday = trim($_POST['birthday']);
+    	//date format check on birthday field
+    	if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$birthday)) {
+    		$birthdayErr = "Please enter a valid date.";
+    	}
+	}
+
+	//if there is not error
+	if (empty($nameErr) and empty($passErr) and empty($emailErr) and empty($birthdayErr)) {
+		//hash the password
+	    $passwordHash = password_hash($pass, PASSWORD_DEFAULT);
+
+	    //prepare sql insert statement to prevent sql injection attack
+	    $sql = "INSERT INTO Users (username, password, email, birthday) VALUES (:username, :password, :email, :birthday)";
+	    $stmt = $conn->prepare($sql);
+
+	    //bind our variables
+	    $stmt->bindValue(':username', $name);
+	    $stmt->bindValue(':password', $passwordHash);
+	    $stmt->bindValue(':email', $email);
+	    $stmt->bindValue(':birthday', $birthday);
+
+	    //execute the statement to insert new account
+	    $result = $stmt->execute();
+
+	    //if sign up process is succesful
+	    if ($result) {
+	    	//give user a notice
+	    	$msg = "Congratulations! Sign up succesufull. <a href=login.php>Login</a>";
+	    }
+	}
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,17 +185,20 @@
 
 <!-- nativation menu -->
 <div class="header-navigation row">
-  <a href="search.html">Search</a>
-  <a href="submission.html">Submission</a>
-  <a href="registration.html">Registration</a>
-  <a href="results_sample.html">Map</a>
+  <a href="search.php">Search</a>
+  <a href="submission.php">Submission</a>
+  <div id="user-account"><?php echo $user_link; ?></div>
 </div>
 
 
 <!-- end of header -->
 
 <!-- main page -->
-<form id="register-block" class="row" onsubmit="return validateForm()">
+<!-- onsubmit="return validateForm()" -->
+<form id="register-block" class="row" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+
+		<!--sign up message -->
+		<h1><font color="red"><?php echo $msg; ?></font></h1>
 
 		<!-- get username -->
 		<div class="register-col">
@@ -68,12 +207,12 @@
 
 		<!-- username error message-->
 		<div class="register-col">
-			<text class="error_msg" id="username_error"></text>
+			<text class="error_msg" id="username_error"><?php echo $nameErr; ?></text>
 		</div>
 
 		<!-- username input -->
 		<div class="register-col">
-			<input class="register-input" type="text" placeholder="Username..." id="username_input">
+			<input class="register-input" type="text" placeholder="Username..." id="username_input" name="username">
 		</div>
 
 		<!-- get password-->
@@ -83,26 +222,12 @@
 
 		<!-- password error message-->
 		<div class="register-col">
-			<text class="error_msg" id="password_error"></text>
+			<text class="error_msg" id="password_error"><?php echo $passErr; ?></text>
 		</div>
 
 		<!-- password input -->
 		<div class="register-col">
-			<input class="register-input" type="password" placeholder="Password..." id="password_input">
-		</div>
-
-		<!-- get gender -->
-		<div class="register-col">
-			<h2><label>Gender:</label></h2>
-		</div>
-
-		<!-- gender input -->
-		<div class="register-col">
-			<select class="register-input">
-				<option>Female</option>
-				<option>Male</option>
-				<option>Prefer not to say</option>
-			</select>
+			<input class="register-input" type="password" placeholder="Password..." id="password_input" name="password">
 		</div>
 
 		<!-- get email -->
@@ -112,12 +237,12 @@
 
 		<!-- email error message-->
 		<div class="register-col">
-			<text class="error_msg" id="email_error"></text>
+			<text class="error_msg" id="email_error"><?php echo $emailErr; ?></text>
 		</div>
 
 		<!-- email input -->
 		<div class="register-col">
-			<input class="register-input" type="text" id="email_input">
+			<input class="register-input" type="text" id="email_input" name="email" value="example@example.com">
 		</div>
 
 		<!-- get date of birth -->
@@ -127,17 +252,17 @@
 
 		<!-- date error message-->
 		<div class="register-col">
-			<text class="error_msg" id="date_error"></text>
+			<text class="error_msg" id="date_error"><?php echo $birthdayErr; ?></text>
 		</div>
 
 		<!-- date input -->
 		<div class="register-col">
-			<input class="register-input" type="text" id="date_input" value="yyyy-mm-dd">
+			<input class="register-input" type="text" id="date_input" value="1999-01-01" name="birthday">
 		</div>
 
 		<!-- register button -->
 		<div class="register-col">
-			<input id="register-btn" type="submit" value="Register">
+			<input id="register-btn" type="submit" value="Register" name="register">
 		</div>
 </form>
 <!-- end of main page -->

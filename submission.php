@@ -1,3 +1,20 @@
+<?php
+//start the session
+session_start();
+
+//Check if the user is logged in.
+if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+    //User logged in. replace username with login link
+    $user_login = "<a>".$_SESSION['user_name']." logged in</a>";
+    //provide a method for user to loggout
+    $user_loggout = "<a href='logout.php'>Logout</a>";
+    //combine the string
+    $user_link = $user_login . $user_loggout;
+} else {
+	//if not, show the link to login and register
+	$user_link = "<a href='registration.php'>Registration</a><a href='login.php'>Login</a>";
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,10 +64,9 @@
 
 <!-- nativation menu -->
 <div class="header-navigation row">
-  <a href="search.html">Search</a>
-  <a href="submission.html">Submission</a>
-  <a href="registration.html">Registration</a>
-  <a href="results_sample.html">Map</a>
+  <a href="search.php">Search</a>
+  <a href="submission.php">Submission</a>
+  <div id="user-account"><?php echo $user_link; ?></div>
 </div>
 
 

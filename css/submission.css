@@ -62,6 +62,11 @@
 	background-color: #111;
 }
 
+/* for login and registration floating */
+#user-account {
+	float: right;
+}
+
 /*  ---------- end of header setup ---------- */
 
 /*  ---------- main page setup -------------- */

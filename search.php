@@ -1,16 +1,20 @@
 <?php
-try {
-    $conn = new PDO("mysql:host=localhost;dbname=db-rst", "root", "root");
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully";
-    }
-catch(PDOException $e)
-    {
-    echo "Connection failed: " . $e->getMessage();
-    }
-?>
+//start the session
+session_start();
 
+//Check if the user is logged in.
+if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+    //User logged in. replace username with login link
+    $user_login = "<a>".$_SESSION['user_name']." logged in</a>";
+    //provide a method for user to loggout
+    $user_loggout = "<a href='logout.php'>Logout</a>";
+    //combine the string
+    $user_link = $user_login . $user_loggout;
+} else {
+	//if not, show the link to login and register
+	$user_link = "<a href='registration.php'>Registration</a><a href='login.php'>Login</a>";
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,17 +66,16 @@ catch(PDOException $e)
 
 <!-- nativation menu -->
 <div class="header-navigation row">
-  <a href="search.html">Search</a>
-  <a href="submission.html">Submission</a>
-  <a href="registration.html">Registration</a>
-  <a href="results_sample.html">Map</a>
+  <a href="search.php">Search</a>
+  <a href="submission.php">Submission</a>
+  <div id="user-account"><?php echo $user_link; ?></div>
 </div>
 
 
 <!-- end of header -->
 
 <!-- main page -->
-<div id="search-box" class="row">
+<form id="search-box" class="row" action="results_sample.php" method="GET">
 		<!-- get food name label -->
 		<div class="search-col">
 			<h1><label>Name:</label></h1>
@@ -80,7 +83,7 @@ catch(PDOException $e)
 
 		<!-- food name input box -->
 		<div class="search-col">
-			<input class="search-input" type="text" placeholder="Food name...">
+			<input class="search-input" type="text" name="name" placeholder="Restaurant name...">
 		</div>
 
 		<!-- get rating label-->
@@ -90,13 +93,7 @@ catch(PDOException $e)
 
 		<!-- rating input box -->
 		<div class="search-col">
-			<select class="search-input">
-				<option>1.0</option>
-				<option>2.0</option>
-				<option>3.0</option>
-				<option>4.0</option>
-				<option>5.0</option>
-			</select>
+			<input class="search-input" type="text" name="rating" placeholder="Rating above...">
 		</div>
 
 		<!-- get location label -->
@@ -106,12 +103,12 @@ catch(PDOException $e)
 
 		<!-- location input box -->
 		<div class="search-col">
-			<input class="search-input" type="text" placeholder="Latitude..." value="0.01">
+			<input class="search-input" type="text" name="lat" placeholder="Latitude..." value="43.57">
 		</div>
 
 		<!-- location input box -->
 		<div class="search-col">
-			<input class="search-input" type="text" placeholder="Longitude..." value="0.01">
+			<input class="search-input" type="text" name="longt" placeholder="Longitude..." value="-79.66">
 		</div>
 
 		<!-- search button -->
@@ -123,7 +120,7 @@ catch(PDOException $e)
 		<div class="search-col">
 			<p><label id="test"></label></p>
 		</div>
-</div>
+</form>
 <!-- end of main page -->
 
 <!-- footer -->

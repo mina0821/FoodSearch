@@ -1,3 +1,31 @@
+<?php
+//start the session
+session_start();
+
+//Check if the user is logged in.
+if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+    //User logged in. replace username with login link
+    $user_login = "<a>".$_SESSION['user_name']." logged in</a>";
+    //provide a method for user to loggout
+    $user_loggout = "<a href='logout.php'>Logout</a>";
+    //combine the string
+    $user_link = $user_login . $user_loggout;
+} else {
+	//if not, show the link to login and register
+	$user_link = "<a href='registration.php'>Registration</a><a href='login.php'>Login</a>";
+}
+
+try {
+	// connect to database
+    $conn = new PDO("mysql:host=localhost;dbname=db-rst", "root", "root");
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,8 +38,8 @@
 	<!-- define external css -->
 	<link rel="stylesheet" type="text/css" href="css/results_sample.css">
 	<!-- define external js file -->
-	<script src="js/results_sample.js"></script>
-	<script async defer
+	<script defer src="js/results_sample.js"></script>
+	<script defer
 	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBh-2YTNU1ZPyvGY3_Boirjy9EVXCMAmXU&callback=initMap">
 	</script>
 
@@ -52,10 +80,9 @@
 
 <!-- nativation menu -->
 <div class="header-navigation row">
-  <a href="search.html">Search</a>
-  <a href="submission.html">Submission</a>
-  <a href="registration.html">Registration</a>
-  <a href="results_sample.html">Map</a>
+  <a href="search.php">Search</a>
+  <a href="submission.php">Submission</a>
+  <div id="user-account"><?php echo $user_link; ?></div>
 </div>
 
 
@@ -71,26 +98,111 @@
 					Results: 
 				</th>
 			</tr>
-			<tr>
-				<td class="results-cell"><a href="individual_sample.html">
-					Happy Lamb Hot Pot 
-				</a></td>
-			</tr>
-			<tr>
-				<td class="results-cell"><a href="individual_sample.html">
-					Morals Village Hot Pot 
-				</a></td>
-			</tr>
-			<tr>
-				<td class="results-cell"><a href="individual_sample.html">
-					Best Friend Chinese Restaurant 
-				</a></td>
-			</tr>
-			<tr>
-				<td class="results-cell"><a href="individual_sample.html">
-					Chinese Legendary Hot Pot 
-				</a></td>
-			</tr>
+			<?php
+			//gets value sent from search form
+			$name = $_GET['name'];
+			$rating = $_GET['rating'];
+			$lat = $_GET['lat'];
+			$longt = $_GET['longt'];
+
+			//mysql search query
+			$pdoQuery = 'SELECT Object.name, Object.lat, Object.longt FROM `Object` INNER JOIN `Review` ON Object.name = Review.name';
+
+			//check if each field is empty
+			//if not empty, add the search condition to query
+			if(!empty($name))
+			{
+				$searchCon[] = 'Object.name LIKE :name';
+			}
+
+			if(!empty($rating))
+			{
+				$searchCon[] = 'Review.rating > :rating';
+			}
+
+			if(!empty($lat))
+			{
+				$searchCon[] = 'ABS(Object.lat-:lat) < 0.01';
+			}
+
+			if(!empty($longt))
+			{
+				$searchCon[] = 'ABS(Object.longt - :longt) < 0.01';
+			}
+
+			//if user at least specify one search condition
+			if (!empty($searchCon))
+			{
+				$pdoQuery .= " WHERE ".implode(" AND " , $searchCon);
+			}
+
+			//prepare the statement to prevent sql injection attack
+			$pdoResult = $conn->prepare($pdoQuery);
+
+			//bind the search value to query
+			if (!empty($name))
+			{
+				//add regexpr for names
+				$keyname = "%".$name."%";
+				$pdoResult->bindParam(':name', $keyname, PDO::PARAM_STR);
+			}
+			if (!empty($rating))
+			{
+				$pdoResult->bindParam(':rating', $rating);
+			}
+			if (!empty($lat))
+			{
+				$pdoResult->bindParam(':lat', $lat);
+			}
+			if (!empty($longt))
+			{
+				$pdoResult->bindParam(':longt', $longt);
+			}
+
+			//execute statement
+			$pdoExec = $pdoResult->execute();
+
+			if($pdoExec)
+			{
+				//if some restaurant meet the search condition
+				//show data in order
+				if($pdoResult->rowCount()>0)
+				{
+					//create a javascript array to store location data
+					echo "<script>";
+					echo "var restArray = new Array;";
+					//create a query array for map restaurant link
+					echo "var qArray = new Array;";
+					echo "</script>";
+					//for each restaurant that meet the search condition
+					foreach($pdoResult as $row)
+					{
+						//store the data for live map
+						$restname = $row['name'];
+						$restlat = $row['lat'];
+						$restlongt = $row['longt'];
+						//use query string to pass the information between two pages
+						$qstring = http_build_query($row);
+						//pass the data to javascript array
+						echo "<script>";
+						//convert data to json form
+						echo 'var temp = ' . json_encode($row) . ';';
+						echo 'var qtemp = ' . json_encode($qstring) . ';';
+						//add data to the javascript array
+						echo "restArray.push(temp);";
+						//add query data to javascript array
+						echo "qArray.push(qtemp)";
+						echo "</script>";
+
+						//display restaurant name in html page
+						//redirect each link to individual page
+						echo '<tr><td class="results-cell"><a href="individual_sample.php?';
+						echo $qstring.'">';
+						echo $restname."</a></td></tr>";
+					}
+				}
+			}
+			?>
 		</table>
 	</div>
 
