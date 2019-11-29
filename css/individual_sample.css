@@ -112,6 +112,34 @@
 	height: 500px;
 }
 
+/* for form format */
+/* submit input format */
+.submit-input {
+	width: 100%;
+	padding: 12px 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+/* submit button attributes */
+#submit-btn {
+	width: 100%;
+	background-color: #333;
+	color: white;
+	padding: 14px 20px;
+	margin: 18px 0px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+/* submit button hover setup */
+#submit-btn:hover {
+	background-color: #111;
+}
+
 /*  ---------- end of main page setup ------- */
 
 /*  ---------- footer setup ----------------- */

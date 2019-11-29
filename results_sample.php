@@ -33,7 +33,7 @@ catch(PDOException $e)
 	<meta charset="UTF-8">
 
 	<!-- title of the page -->
-	<title>Results Sample</title>
+	<title>Results</title>
 
 	<!-- define external css -->
 	<link rel="stylesheet" type="text/css" href="css/results_sample.css">
@@ -106,7 +106,7 @@ catch(PDOException $e)
 			$longt = $_GET['longt'];
 
 			//mysql search query
-			$pdoQuery = 'SELECT Object.name, Object.lat, Object.longt FROM `Object` INNER JOIN `Review` ON Object.name = Review.name';
+			$pdoQuery = 'SELECT DISTINCT Object.name, Object.lat, Object.longt FROM `Object` INNER JOIN `Review` ON Object.name = Review.name';
 
 			//check if each field is empty
 			//if not empty, add the search condition to query

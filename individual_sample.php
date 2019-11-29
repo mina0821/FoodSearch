@@ -2,6 +2,10 @@
 //start the session
 session_start();
 
+require 'lib_aws/aws-autoloader.php';
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
 //Check if the user is logged in.
 if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
     //User logged in. replace username with login link
@@ -25,6 +29,57 @@ catch(PDOException $e)
     {
     echo "Connection failed: " . $e->getMessage();
     }
+// AWS Info
+$bucketName = 'foodsearch';
+$IAM_KEY = 'AKIA2SHTPM77UQDLY6H5';
+$IAM_SECRET = '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';
+
+// Connect to AWS
+try {
+	// You may need to change the region. It will say in the URL when the bucket is open
+	// and on creation.
+	$s3 = S3Client::factory(
+		array(
+			'credentials' => array(
+				'key' => $IAM_KEY,
+				'secret' => $IAM_SECRET
+			),
+			'version' => 'latest',
+			'region'  => 'ca-central-1'
+		)
+	);
+} catch (Exception $e) {
+	// We use a die, so if this fails. It stops here. Typically this is a REST call so this would
+	// return a json object.
+	die("Error: " . $e->getMessage());
+}
+
+//get value from query string
+$name = $_GET['name'];
+//send location data to js for map
+$lat = $_GET['lat'];
+$longt = $_GET['longt'];
+
+//if user submit a rating and review
+if (isset($_POST['submit'])){
+
+	//retrieve  the filed value from login form
+    $rating = !empty($_POST['rating']) ? trim($_POST['rating']) : null;
+    $review = !empty($_POST['review']) ? trim($_POST['review']) : null;
+
+	//prepare sql insert statement to prevent sql injection attack
+	$sql = "INSERT INTO Review (name, rating, review) VALUES (:name, :rating, :review)";
+	$stmt = $conn->prepare($sql);
+
+	//bind our variables
+	$stmt->bindValue(':name', $name);
+	$stmt->bindValue(':rating', $rating);
+	$stmt->bindValue(':review', $review);
+	
+	//execute the statement to insert new account
+	$result = $stmt->execute();
+}
+
 ?>
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage">
@@ -33,7 +88,7 @@ catch(PDOException $e)
 	<meta charset="UTF-8">
 
 	<!-- title of the page -->
-	<title>Individual Sample</title>
+	<title>Details</title>
 
 	<!-- define external css -->
 	<link rel="stylesheet" type="text/css" href="css/individual_sample.css">
@@ -103,11 +158,6 @@ catch(PDOException $e)
 	<!-- restaurant title display -->
 	<div class="rest-row rest-title">
 	<?php
-		//get value from query string
-		$name = $_GET['name'];
-		//send location data to js for map
-		$lat = $_GET['lat'];
-		$longt = $_GET['longt'];
 		echo "<script>";
 		echo 'var lat = ' . json_encode($lat) . ';';
 		echo 'var longt = ' . json_encode($longt) . ';';
@@ -147,14 +197,20 @@ catch(PDOException $e)
 
 		<!-- restaurant sample image -->
 		<div class="rest-title"><h2>Image:</h2></div>
-		<picture>
-			<!-- sample image for desktop user -->
-			<source media="(min-width: 800px)" srcset="img/sample_image.jpg">
-			<!-- sample image for moblie user -->
-			<source media="(max-width: 800px)" srcset="img/sample_image_moblie.jpg">
-			<img class="rest-row" src="img/sample_image.jpg" alt="Picture of restaurant.">
-		</picture>
+		<?php
+			$cmd = $s3->getCommand('GetObject', [
+				'Bucket' => 'foodsearch',
+				'Key' => 'Happy Lamb Hot Pot/20150403_000410000_iOS.gif'
+			]);
 
+			//The period of availability
+			$request = $s3->createPresignedRequest($cmd, '+10 minutes');
+
+			//Get the pre-signed URL
+			$signedUrl = (string) $request->getUri();
+
+			echo '<img class="rest-row" src="'.$signedUrl.'" alt="Picture of restaurant.">';
+		?>
 	</div>
 
 	<!-- restaurant location map -->
@@ -162,7 +218,7 @@ catch(PDOException $e)
 
 	<!-- restaurant reviews -->
 	<div class="rest-row rest-title">
-		<h2>Reviews:</h2>
+		<h2>Reviews</h2>
 	</div>
 
 	<div class="rest-row rest-col">
@@ -191,6 +247,38 @@ catch(PDOException $e)
 		?>
 		<h3>More reviews comming soon...</h3>
 	</div>
+
+	<div class="rest-row rest-title">
+		<h2>Submit your rating and review</h2>
+	</div>
+	<?php
+	//Check if the user is logged in.
+	if(isset($_SESSION['user_name']) || isset($_SESSION['logged_in'])){
+		//get the current url with query string
+		$query_str = '?'.$_SERVER['QUERY_STRING'];
+		$current_url = $_SERVER['PHP_SELF'].$query_str;
+
+		//if it is, show a rating and review submission form
+		echo '<form action="'.$current_url.'" method="post">
+			<!-- get ratting -->
+			<h3><label>Rating:</label></h3>
+			<input class="submit-input" type="number" step="0.01" min="0" max="5" name="rating" required>
+
+			<!-- get reviews -->
+			<h3><label>Review:</label></h3>
+			<textarea class="submit-input" maxlength="225" rows="3" name="review" required></textarea>
+			
+			<!-- submit button -->
+			<input id="submit-btn" type="submit" name="submit">
+		</form>';
+	}
+	else {
+		//tell the user to login
+		echo "<div class='rest-row rest-col'>";
+		echo "<h2>Please log in to submit ratings and reviews. <a href='login.php'>Login</a></h2>";
+		echo "</div>";
+	}
+	?>
 
 </div>
 <!-- end of main page -->
